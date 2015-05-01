@@ -1,0 +1,37 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{gensymb}
+\usepackage{wrapfig}
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[color=blue,shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\author{Philipp Oldenburg, Patrick Zumsteg, Simon Wallny}
+\title{Gruppe „Denial of Service“}
+\date{Frühjahrssemester 2015}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Vorwort}
+Das Projekt „Denial of Service“, entstand im Rahmen der Vorlesung „Internet-Technologien“ an der Universität Basel im Frühjahrssemester 2015.\hfill\\
+Die bearbeitende Gruppe besteht aus Philipp Oldenburg, Patrick Zumsteg und Simon Wallny.
+\newpage
+\section{Angriffs-Strategien}
+\subsection{Applikationsebene}
+SlowLoris
+\subsection{Transportebene}
+Syn Flood
+\subsection*{Netzwerkebene}
+ICMP Flood
+\section{Verteidigungs-Strategien}
+Stecker ziehen.
+\section{Bekannte Anwendungen}
+LOIC\\
+OWASP
+
+\end{document}
