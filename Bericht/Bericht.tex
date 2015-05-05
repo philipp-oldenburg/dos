@@ -40,17 +40,20 @@ DoS-Angriffe können über verschiedene Wege gefahren werden, und auf unterschie
 \subsubsection*{Angriff}
 Ein ,,Slow Headers``-Angriff ist ein auf Webserver spezialisierter, besonders eleganter Angriff, der dem Angreifer kaum Ressourcen abverlangt. Hierbei wird dem Ziel ein Strom von unfertigen Headern von HTTP-Get Anfragen geschickt. Der Server muss, damit der Angriff effektiv ist, konfiguriert sein die Verbindung offen zu halten und auf den Rest der Anfrage zu warten. Diese Verbindungen lassen sich nun offen halten, indem bevor der timeout erfolgt, der mehrere Minuten lang sein kann, ein weiterer Teil der Anfrage geschickt wir, wobei der Header allerdings immer noch nicht geschlossen wird. Der Webserver, der nur eine endliche Menge Verbindungen halten kann, wird so für normale Nutzer unzugänglich.
 \subsubsection*{Verteidigung}
+TODO
 \subsection{Transportebene - Syn Flood.}
 \subsubsection*{Angriff}
 Syn Flood (engl. \textit{Syn Flut}) ist ein simpler Angriff, bei dem von dem normalen TCP-Handshake der erste Schritt von Seitens des Angreifers so schnell wie möglich wiederholt wird. Das Ziel ertrinkt nun in der Flut von Verbindungsanfragen und kann nicht mehr auf alle antworten, auch nicht auf die vereinzelten echten Anfragen seiner Nutzer.
 \subsubsection*{Verteidigung}
+TODO
 \subsection{Netzwerkebene - ICMP Flood}
 \subsubsection*{Angriff}
 ICMP Flood (engl. \textit{ICMP Flut}) Bei einem ICMP Smurf-Angriff kann ein schlecht konfiguriertes Netzwerk ausgenutzt werden, um ein Ping-Packet das so aussieht, als komme es vom Ziel, an alle Rechner des Netzes zu schicken, die allesamt antworten und das Ziel damit stark belasten.
 \subsubsection*{Verteidigung}
+TODO
 \section{Bekannte Anwendungen}
 \subsection{Low Orbit Ion Cannon}
-Die LOIC ist ein sehr bekanntes, von einer sich zum freien Internetkollektiv Anonymous bekennender Gruppe Hacktivisten entwickeltes DoS-Angriffstool. Anders als bei den meisten frei verfügbaren Tools war ihre Bestimmung niemals Belastungstests, sondern das anrichten von Schaden an politisch motivierten Zielen. Während die Ion Cannon in erster Linie für verteilte Angriffe, DDoS, bedacht ist, uns sich zwecks dessen in einen ,,Hive Mode`` schalten lässt, bei dem ein Angriff zentral synchronisiert von vielen Teilnehmern gleichzeitig gestartet wird, lassen sich auch mit einer einzigen Anwendung messbare Ergebnisse erzielen.\\
+Die LOIC ist ursprünglich eine open-source Software für Belastungstests. Unsere Tests haben wir allerdings mit einer abgewandelten Version der Anwendung durchgeführt, einem von einer sich zum freien Internetkollektiv Anonymous bekennender Gruppe Hacktivisten entwickeltes DoS-Angriffstool. Anders als bei den meisten frei verfügbaren Tools war ihre Bestimmung niemals Belastungstests, sondern das anrichten von Schaden an politisch motivierten Zielen. Während diese Ion Cannon in erster Linie für verteilte Angriffe, DDoS, gedacht ist, und sich zwecks dessen in einen ,,Hive Mode`` schalten lässt, bei dem ein Angriff zentral synchronisiert von vielen Teilnehmern gleichzeitig gestartet wird, lassen sich auch mit einer einzigen Anwendung messbare Ergebnisse erzielen.\\
 Wir haben den uns zur Verfügung gestellten Rechner über eine lokale Verbindung mit der LOIC angegriffen, und folgende Messwerte erhalten.\\
 \includegraphics[scale=0.9]{MatLab/LOICVictimSys.eps}\\
 \includegraphics[scale=0.9]{MatLab/LOICVictimBand.eps}\\
