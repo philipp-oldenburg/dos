@@ -8,7 +8,7 @@
 \usepackage{epstopdf}
 \usepackage{enumitem}
 \usepackage{gensymb}
-\usepackage{wrapfig}
+\usepackage{float}
 \usepackage{tikz}
 \usetikzlibrary{arrows,shapes,positioning,shadows,trees}
 
@@ -51,7 +51,8 @@ Gegen SYN-Floods gibt es aber schon seit langer Zeit eine "Wunderwaffe", bekannt
 \subsubsection*{Angriff}
 ICMP Flood (engl. \textit{ICMP Flut}) Bei einem ICMP Smurf-Angriff kann ein schlecht konfiguriertes Netzwerk ausgenutzt werden, um ein Ping-Packet das so aussieht, als komme es vom Ziel, an alle Rechner des Netzes zu schicken, die allesamt antworten und das Ziel damit stark belasten.
 \subsubsection*{Verteidigung}
-TODO
+Obwohl Slow-Header-Angriffe extrem mächtig sind und einen Server mühelos in die Knie zwingt, solange die Angreiferseite mehr Ports offen halten kann als der verteidigende Anbieter, ist es leider (oder zum Glück) sehr leicht, sich gegen diese Attacken zu immunisieren. Da ein Slow-Headers-Angriff alle Verbindungen besetzt und offen hält, die der Server bereitstellt, muss dieser nichts weiter tun, als die Anzahl an simultanen Verbindungen, die ein Client (sprich: eine IP-Adresse, was nicht unproblematisch ist) offen halten kann, zu begrenzen. Hierfür gibt es beispielsweise das Apache-Modul \textit{mod\_qos}.\\
+Allerdings ist diese Verteidigung nicht narrensicher; einerseits kann es sein, dass ein Serviceanbieter damit rechnet, mit vielen Clients gleichzeitig zu arbeiten, die sich hinter einem NAT befinden, also aus Sicht des Servers von der gleichen IP aus kommunizieren. In diesem Fall müsste er eine große Anzahl an simultanen Verbindungen zulassen, was seine Verteidigung natürlich stark schwächt. Außerdem ist man gegen einen verteilten Angriff immer noch nur mittelmäßig geschützt: Sei $x$ die Anzahl Verbindungen, die pro IP simultan geöffnet sein dürfen, und $M$ die Anzahl Verbindungen, zu der der Server insgesamt fähig ist. Dann braucht es höchstens $\frac{M}{x}$ Angreifer-IPs, um den Host lahmzulegen. Die maximale Anzahl an Verbindungen, die der Server eingehen kann, ist zwar frei wählbar, allerdings müssen hinter dieser Zahl natürlich entsprechenden Systemressourcen stehen, und das Problem wird nur auf CPU/RAM verschoben.
 \section{Bekannte Anwendungen}
 \subsection{Low Orbit Ion Cannon}
 Die LOIC ist ursprünglich eine open-source Software für Belastungstests. Unsere Tests haben wir allerdings mit einer abgewandelten Version der Anwendung durchgeführt, einem von einer sich zum freien Internetkollektiv Anonymous bekennender Gruppe Hacktivisten entwickeltes DoS-Angriffstool. Anders als bei den meisten frei verfügbaren Tools war ihre Bestimmung niemals Belastungstests, sondern das anrichten von Schaden an politisch motivierten Zielen. Während diese Ion Cannon in erster Linie für verteilte Angriffe, DDoS, gedacht ist, und sich zwecks dessen in einen ,,Hive Mode`` schalten lässt, bei dem ein Angriff zentral synchronisiert von vielen Teilnehmern gleichzeitig gestartet wird, lassen sich auch mit einer einzigen Anwendung messbare Ergebnisse erzielen.\\
@@ -61,7 +62,7 @@ Wir haben den uns zur Verfügung gestellten Rechner über eine lokale Verbindung
 Dieser vereinzelte Angriff war nicht genug, damit der Server den Dienst vollständig quittiert, allerdings hat er schon bei diesen harmlosen Dimensionen merklich langsamer geantwortet als sonst.
 \subsection{Open Web Application Security Project}
 SwitchBlade, lizenziert von ProactiveRISK, ist eine Anwendung in Rahmen des OWASP um Belastungstests für eigene Webserver auszuführen. Dazu führt es einen ,,Slow Headers``-Angriff aus, und legte in unseren Tests einen frisch aufgesetzten, ungeschützten Apache-Server binnen Sekunden gründlich lahm. Die Threadkonfiguration des frisch gestarteten Servers bestand aus zwei Kindprozessen mit jeweils 25 Threads, hier auf 10 gekürzt.
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
   level 1/.style={sibling distance=24mm},
@@ -100,8 +101,10 @@ SwitchBlade, lizenziert von ProactiveRISK, ist eine Anwendung in Rahmen des OWAS
 
 \end{scope}
 \end{tikzpicture}
-\end{figure}\\
-Nachdem der Angriff gestartet wurde, sah die Threadkonfiguration dagegen wie folgt aus, und der Server war über den Browser nicht mehr zu erreichen.\\
+\end{figure}
+\noindent Nachdem der Angriff gestartet wurde, sah die Threadkonfiguration dagegen wie folgt aus, und der Server war über den Browser nicht mehr zu erreichen.\\
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[
   level 1/.style={sibling distance=24mm},
   edge from parent/.style={->,draw},
@@ -173,8 +176,11 @@ Nachdem der Angriff gestartet wurde, sah die Threadkonfiguration dagegen wie fol
 \node [below of = c58, yshift=15pt] (c59) {Wait};
 \node [below of = c59, yshift=15pt] (c510) {Wait};
 \end{scope}
-\end{tikzpicture}\\
-Wenn allerdings das Modul TODO\\
+\end{tikzpicture}
+\end{figure}
+\noindent Wenn allerdings ein Modul zur Verteidigung geladen wird, in unserem Test \textit{mod\_qos}, ist der Effekt sehr viel weniger drastisch:\\
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[
   level 1/.style={sibling distance=24mm},
   edge from parent/.style={->,draw},
@@ -250,8 +256,10 @@ Wenn allerdings das Modul TODO\\
 \node [below of = c59, yshift=15pt] (c510) {Idle};
 \end{scope}
 \end{tikzpicture}
+\end{figure}
+\noindent Es findet zwar eine gewisse Belastung statt, aber der Server kann den Betrieb aufrechterhalten.
 
 \section{Anonymisierung}
-Ob der illegalen Natur von DoS-Angriffen liegt es grundsätzlich im Interesse des Angreifers seine Identität nicht preiszugeben. Proxys sind dabei keine Hilfe, da diese den Datenstrom zu stark drosseln um nachwievor effektiv zu sein. Die LOIC beispielsweise betreibt keinen Versuch die Identität der Angreifer zu verbergen. Bestimmte Angriffe allerdings erfordern nicht, dass der Angreifer seine eigene IP-Adresse preisgibt, insbesondere, da oft eine Antwort des Angegriffenen nicht erforderlich und somit ohnehin nicht erwünscht ist. So ist in gewissen Fällen \textbf{IP-Spoofing} möglich. Das bedeutet, in den geschickten Packeten eine falsche IP-Adresse als Absender anzugeben, und es sit bei gewissen Angriffen sogar ein integraler Bestandteil des Vorgehens, sich als jemand anderes, etwa das Angriffsziel auszugeben. Es kann dabei allerdings passieren, dass ein Zwischenknoten auf dem Weg zum Ziel bemerkt, dass die Absenderadresse aus einer Richtung kommt, aus der sie nicht hätte kommen dürfen, und das Paket subsequent verwirft, denn das kann nur bedeuten, dass beim Routing etwas grundlegend schiefgelaufen ist, oder jemand das System missbraucht.
+Ob der illegalen Natur von DoS-Angriffen liegt es grundsätzlich im Interesse des Angreifers seine Identität nicht preiszugeben. Proxys sind dabei keine Hilfe, da diese den Datenstrom zu stark drosseln um nachwievor effektiv zu sein. Die LOIC beispielsweise betreibt keinen Versuch die Identität der Angreifer zu verbergen. Bestimmte Angriffe allerdings erfordern nicht, dass der Angreifer seine eigene IP-Adresse preisgibt, insbesondere, da oft eine Antwort des Angegriffenen nicht erforderlich und somit ohnehin nicht erwünscht ist. So ist in gewissen Fällen \textbf{IP-Spoofing} möglich. Das bedeutet, in den geschickten Packeten eine falsche IP-Adresse als Absender anzugeben, und es ist bei gewissen Angriffen sogar ein integraler Bestandteil des Vorgehens, sich als jemand anderes, etwa das Angriffsziel auszugeben. Es kann dabei allerdings passieren, dass ein Zwischenknoten auf dem Weg zum Ziel bemerkt, dass die Absenderadresse aus einer Richtung kommt, aus der sie nicht hätte kommen dürfen, und das Paket subsequent verwirft, denn das kann nur bedeuten, dass beim Routing etwas grundlegend schiefgelaufen ist, oder jemand das System missbraucht.
 
 \end{document}
