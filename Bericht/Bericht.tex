@@ -45,7 +45,8 @@ TODO
 \subsubsection*{Angriff}
 Syn Flood (engl. \textit{Syn Flut}) ist ein simpler Angriff, bei dem von dem normalen TCP-Handshake der erste Schritt von Seitens des Angreifers so schnell wie möglich wiederholt wird. Das Ziel ertrinkt nun in der Flut von Verbindungsanfragen und kann nicht mehr auf alle antworten, auch nicht auf die vereinzelten echten Anfragen seiner Nutzer.
 \subsubsection*{Verteidigung}
-TODO
+Momentan sind mehrere Wege bekannt, sich gegen eine SYN-Flut zu wehren. Ein naiver Ansatz wäre natürlich, die älteste der halboffenen Verbindungen (die also noch kein ACK vom Client erhalten haben) einfach zu recyclen und für ein neu ankommendes SYN zu verwenden. Hierbei hat natürlich der Client, dem die Verbindung ursprünglich gehörte, das Nachsehen, und im Falle einer heftigen SYN-Flut ist das Backlog des Servers immer noch (fast) nur mit ,,böswilligen`` Verbindungen befüllt.\\
+Gegen SYN-Floods gibt es aber schon seit langer Zeit eine "Wunderwaffe", bekannt als SYN-Cookies. Die Idee hierbei ist, dass der Server die Sequenznummer seines SYN-ACK-Pakets anhand eines üblicherweise im Minutentakt inkrementierten Zeitstempels, seiner eigenen und der Adresse des Clients berechnet. Ein Client, der wirklich eine Verbindung will, kann würde die Sequenznummer dieses Pakets um eins erhöhen und als ACK-Nummer in seinem ACK-Paket zurückschicken. Der Server kennt nun ja sowohl den aktuellen(oder letzten) Zeitstempel, als auch Quell-und Zieladressen, kann also nachrechnen, ob er diesem Client vor kurzem ein SYN-ACK geschickt haben kann.
 \subsection{Netzwerkebene - ICMP Flood}
 \subsubsection*{Angriff}
 ICMP Flood (engl. \textit{ICMP Flut}) Bei einem ICMP Smurf-Angriff kann ein schlecht konfiguriertes Netzwerk ausgenutzt werden, um ein Ping-Packet das so aussieht, als komme es vom Ziel, an alle Rechner des Netzes zu schicken, die allesamt antworten und das Ziel damit stark belasten.
